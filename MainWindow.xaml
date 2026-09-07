@@ -1,0 +1,141 @@
+﻿<Window x:Class="ArkCommander.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ARK Commander" Width="1280" Height="800" MinWidth="1024" MinHeight="640"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        WindowStartupLocation="CenterScreen">
+  <Window.Resources>
+    <SolidColorBrush x:Key="Bg" Color="#0D1420"/>
+    <SolidColorBrush x:Key="Panel" Color="#141C2B"/>
+    <SolidColorBrush x:Key="Br" Color="#26334A"/>
+    <SolidColorBrush x:Key="Tx" Color="#E8ECF4"/>
+    <SolidColorBrush x:Key="Sub" Color="#8A93A6"/>
+    <SolidColorBrush x:Key="Ac" Color="#3FA7FF"/>
+    <Style TargetType="TextBlock">
+      <Setter Property="Foreground" Value="#E8ECF4"/>
+      <Setter Property="FontSize" Value="14"/>
+    </Style>
+    <Style TargetType="Button">
+      <Setter Property="Background" Value="#1B2536"/>
+      <Setter Property="Foreground" Value="#E8ECF4"/>
+      <Setter Property="BorderBrush" Value="#26334A"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Padding" Value="14,10"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template"><Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10"
+                  Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="Center"/>
+          </Border>
+        </ControlTemplate></Setter.Value></Setter>
+      <Style.Triggers>
+        <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#233049"/></Trigger>
+      </Style.Triggers>
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="Background" Value="#101827"/>
+      <Setter Property="Foreground" Value="#E8ECF4"/>
+      <Setter Property="BorderBrush" Value="#26334A"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Padding" Value="10,8"/>
+    </Style>
+    <Style TargetType="CheckBox">
+      <Setter Property="Foreground" Value="#E8ECF4"/>
+      <Setter Property="FontSize" Value="14"/>
+    </Style>
+  </Window.Resources>
+
+  <Border Background="{StaticResource Bg}" BorderBrush="{StaticResource Br}" BorderThickness="1" CornerRadius="12">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="60"/><RowDefinition Height="*"/><RowDefinition Height="36"/>
+      </Grid.RowDefinitions>
+
+      <Grid Background="Transparent" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="18,0">
+          <TextBlock Text="🎮" FontSize="20" VerticalAlignment="Center"/>
+          <TextBlock Text="ARK Commander" FontSize="18" FontWeight="Bold" Margin="12,0,0,0" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,12,0">
+          <Button Content="🎮 Оверлей" Click="ToggleOverlay_Click" Margin="0,0,8,0"/>
+          <Button Content="–" Click="Minimize_Click" Width="44"/>
+          <Button Content="✕" Click="Close_Click" Width="44" Margin="8,0,0,0"/>
+        </StackPanel>
+      </Grid>
+
+      <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="220"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+
+        <StackPanel Background="{StaticResource Panel}" Margin="0,0,1,0">
+          <Button Content="⚡  Команды"  Click="SideCommands_Click" HorizontalContentAlignment="Left" Margin="10,12,10,6" Padding="14,12" FontSize="15"/>
+          <Button Content="🛒  Магазин"  Click="SideShop_Click"     HorizontalContentAlignment="Left" Margin="10,6" Padding="14,12" FontSize="15"/>
+          <Button Content="🎯  Треки"    Click="SideTrack_Click"    HorizontalContentAlignment="Left" Margin="10,6" Padding="14,12" FontSize="15"/>
+          <Button Content="🗺  Атлас"    Click="SideAtlas_Click"    HorizontalContentAlignment="Left" Margin="10,6" Padding="14,12" FontSize="15"/>
+          <Button Content="⚙  Настройки" Click="SideSettings_Click" HorizontalContentAlignment="Left" Margin="10,6" Padding="14,12" FontSize="15"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1">
+          <Grid x:Name="PageCommands">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"><WrapPanel x:Name="CommandsPanel" Margin="14"/></ScrollViewer>
+          </Grid>
+
+          <Grid x:Name="PageShop" Visibility="Collapsed">
+            <StackPanel Margin="24">
+              <TextBlock Text="Магазин" FontSize="22" FontWeight="Bold" Margin="0,0,0,18"/>
+              <Button Content="Купить ресурсы" Click="ShopBuy_Click"  FontSize="16" Padding="18,14" HorizontalContentAlignment="Left" Margin="0,0,0,12"/>
+              <Button Content="Киты"           Click="ShopKit_Click"  FontSize="16" Padding="18,14" HorizontalContentAlignment="Left" Margin="0,0,0,12"/>
+              <Button Content="Продажа"        Click="ShopSale_Click" FontSize="16" Padding="18,14" HorizontalContentAlignment="Left"/>
+            </StackPanel>
+          </Grid>
+
+          <Grid x:Name="PageTracks" Visibility="Collapsed">
+            <StackPanel Margin="24">
+              <TextBlock Text="Треки" FontSize="22" FontWeight="Bold" Margin="0,0,0,18"/>
+              <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                <TextBox x:Name="TrackNameBox" Width="240" Margin="0,0,10,0"/>
+                <Button Content="Добавить" Click="AddTrack_Click"/>
+              </StackPanel>
+              <StackPanel x:Name="TracksPanel"/>
+            </StackPanel>
+          </Grid>
+
+          <Grid x:Name="PageAtlas" Visibility="Collapsed">
+            <TextBlock Text="🗺 Атлас дино&#x0a;&#x0a;Здесь будут точки спавна с координатами (скоро)." Margin="24" FontSize="16"/>
+          </Grid>
+
+          <Grid x:Name="PageSettings" Visibility="Collapsed">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+              <StackPanel Margin="24">
+                <TextBlock Text="Настройки" FontSize="22" FontWeight="Bold" Margin="0,0,0,18"/>
+                <TextBlock Text="ИГРА" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                <TextBlock Text="Клавиша чата в игре" Foreground="{StaticResource Sub}" Margin="0,0,0,6"/>
+                <TextBox x:Name="ChatKeyBox" Width="200" HorizontalAlignment="Left" Margin="0,0,0,18"/>
+                <TextBlock Text="ОВЕРЛЕЙ" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                <CheckBox x:Name="OverlayOnStartupCheck" Content="Показывать оверлей при запуске" Margin="0,0,0,8"/>
+                <CheckBox x:Name="OverlayTopmostCheck" Content="Оверлей поверх всех окон" Margin="0,0,0,18"/>
+                <TextBlock Text="ОКНО" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                <CheckBox x:Name="CloseToTrayCheck" Content="Сворачивать в трей при закрытии (крестик)" Margin="0,0,0,18"/>
+                <Button Content="Сохранить настройки" Click="SaveSettings_Click" HorizontalAlignment="Left"/>
+              </StackPanel>
+            </ScrollViewer>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Border Grid.Row="2" Background="{StaticResource Panel}" BorderBrush="{StaticResource Br}" BorderThickness="0,1,0,0">
+        <Grid>
+          <TextBlock x:Name="StatusText" Margin="14,0" VerticalAlignment="Center" Foreground="{StaticResource Sub}" FontSize="13"/>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,14,0" VerticalAlignment="Center">
+            <Ellipse x:Name="GameDot" Width="9" Height="9" Fill="#6B7280" Margin="0,0,7,0"/>
+            <TextBlock x:Name="GameStatusText" Text="игра не запущена" Foreground="{StaticResource Sub}" FontSize="13"/>
+          </StackPanel>
+        </Grid>
+      </Border>
+    </Grid>
+  </Border>
+</Window>
